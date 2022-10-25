@@ -11,6 +11,7 @@
     <div id="taskChoice" class="taskChoice">
       <p class="parChoice" id="addChoice" onclick="chooseAdd()"><b>Add</b></p>
       <p class="parChoice" id="updateChoice" onclick="chooseUpdate()">Update</p>
+      <p class="parChoice" id="deleteChoice" onclick="chooseDelete()">Delete</p>
     </div>
     <div class="input_contact_form" id="input_contact_div">
       <select class="data_input" id="selectId" name="id" hidden></select>
@@ -20,9 +21,9 @@
         <input type="text" class="data_input" id="email" name="email" placeholder="email">
         <input type="text" class="data_input" id="blogLink" name="blogLink" placeholder="blogLink">
         <input type="text" class="data_input" id="comment" name="comment" placeholder="comment">
-        <input type="submit" id="submit" class="add_contact_button" value="add contact">
+        <input type="button" id="submit" class="add_contact_button" value="add contact">
       </form>
-      <p th:text="${listSize}"></p>
+      <p th:text="${list.size()}"></p>
     </div>
   </div>
 </div>
