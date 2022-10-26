@@ -24,7 +24,6 @@ public class GetContactController {
 
     @GetMapping("/getContact")
     public Contact getContact(@RequestParam int contactId){
-//        id = contactId - 1;
         return ContactController.getContactById(contactId);
     }
 }

@@ -11,7 +11,7 @@
     z-index: 1;
     margin: auto;
     padding-bottom: 20px;
-    width: 400px;
+    width: 500px;
     overflow: auto;
     border-radius: 10px;
     background-color: rgb(227, 227, 227);
@@ -50,13 +50,31 @@
 
 .taskChoice {
     height: 9%;
+    padding-left: 40px;
+    padding-right: 40px;
     border-bottom-style: solid;
     border-color: gray;
     border-width: 1px;
     display: flex;
+    justify-content: space-between;
 }
 
 .parChoice {
     font-size: 25px;
-    margin-left: 75px;
+    margin-left: 10px;
+    margin-right: 10px;
+}
+
+.request_Table {
+    margin-top: 20px;
+    border-collapse: collapse;
+    border-bottom-color: #42060d;
+}
+
+.request_Table_cell {
+    border-style: solid;
+    border-color: #42060d;
+    padding: 4px;
+    align-items: center;
+    border-width: 1px;
 }

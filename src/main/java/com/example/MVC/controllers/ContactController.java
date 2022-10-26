@@ -25,11 +25,11 @@ public class ContactController {
         return contactList;
     }
 
-//    @GetMapping("/greeting")
-//    public String greeting(@RequestParam(name="name", required=false, defaultValue="World") String name, Model model) {
-//        model.addAttribute("name", name);
-//        return "greeting";
-//    }
+    @GetMapping("/greeting")
+    public String greeting(@RequestParam(name="name", required=false, defaultValue="World") String name, Model model) {
+        model.addAttribute("name", name);
+        return "greeting";
+    }
 
     @GetMapping("/addContact") //http://localhost:8080/addContact
     public String addContact(@RequestParam String name, @RequestParam String phone, @RequestParam String email,
@@ -43,7 +43,6 @@ public class ContactController {
         Contact contact = new Contact(name, phone, email, blogLink, comment);
         addContact(contact);
         model.addAttribute("list", contactList);
-        Contact.print(contactList);
         return "contact";
     }
 
@@ -85,5 +84,14 @@ public class ContactController {
         if(!isValid(id)) return false;
         contactList.remove(getContactId(id));
         return true;
+    }
+
+    public static LinkedList<Contact> getSelectName(String name){
+        LinkedList<Contact> list = new LinkedList<>();
+        for(Contact c : contactList){
+            if(c.getName().equalsIgnoreCase(name));
+            list.add(c);
+        }
+        return list;
     }
 }

@@ -14,7 +14,7 @@ function updateContact() {
             comment: $('#comment').val()
         },
         success: function (){
-            flushInputs();
+            flushData();
             chooseUpdate();
         }
     })
@@ -26,13 +26,9 @@ function deleteContact(){
         dataType: "html",
         contentType: "application/json; charset=utf-8",
         data: {
-            id: $('#selectId').val(),
-        },
-        // success: function (data){
-        //     console.log(JSON.parse(data));
-        // }
+            id: $('#selectId').val()},
         success: function (){
-            flushInputs();
+            flushData();
             chooseDelete();
         }
     })
@@ -51,7 +47,20 @@ function addContact(){
             comment: $('#comment').val()
         }
     });
-    flushInputs();
+    flushData();
+}
+function requestContact(){
+    flushTable();
+    $.ajax({
+        url:"/getName",
+        type: "GET",
+        dataType: "html",
+        data: {name: $('#name').val()},
+        success(data){
+            let name = JSON.parse(data);
+            drawTable(name);
+        }
+    })
 }
 //
 function getIds(){
@@ -99,7 +108,7 @@ function selectListener(){
         contentType: "application/json; charset=utf-8",
         data: {contactId: getIdSelected()},
         success(data) {
-            flushInputs();
+            flushData();
             setContactProps(JSON.parse(data));
         }
     })
@@ -107,48 +116,111 @@ function selectListener(){
 //Кнопки выбора действия.
 attrSubButton("add");
 function chooseAdd() {
-    $('#addChoice').html("<b>Add</b>");
-    $('#updateChoice').html("Update");
-    $('#deleteChoice').html("Delete");
+    drawTask("add");
     $('#selectId').hide();
-    flushInputs();
-    attrSubButton('add');
 }
 function chooseUpdate() {
-    $('#addChoice').html("Add");
-    $('#deleteChoice').html("Delete");
-    $('#updateChoice').html("<b>Update</b>");
-    flushInputs()
-    attrSubButton('update');
+    drawTask("update");
     selectIdShow();
 }
 function chooseDelete(){
-    $('#addChoice').html("Add");
-    $('#updateChoice').html("Update");
-    $('#deleteChoice').html("<b>Delete</b>");
-    flushInputs();
-    attrSubButton('delete');
+    drawTask("delete");
     selectIdShow();
+}
+function chooseRequest() {
+    drawTask("request");
+    $('#selectId').hide();
 }
 function attrSubButton(task){
     let submit = $('#submit');
-    submit.val(task + " contact");
+    if (task !== "request") submit.val(task + " contact");
+    else submit.val(task);
     submit.off('click');
     submit.on('click', function (){
         if(task === 'add') addContact();
         else if(task === 'update') updateContact();
-        else deleteContact();
+        else if (task === 'delete') deleteContact();
+        else requestContact();
     });
 }
-function flushInputs() {
+function flushData() {
     $('#name').val("");
     $('#phone').val("");
     $('#email').val("");
     $('#blogLink').val("");
     $('#comment').val("");
+    flushTable();
+}
+function flashChoice(task) {
+    $('#addChoice').html("add");
+    $('#updateChoice').html("update");
+    $('#deleteChoice').html("delete");
+    $('#requestChoice').html("request");
+    $('#' + task + "Choice").html("<b>" + task + "</b>");
 }
 function selectIdShow(){
     $('#selectId').show();
     getIds();
     setTimeout(function() {selectListener()},50);
+}
+//Draw Table
+function drawTable(tableData) {
+    let table = $('#nameRequestTable');
+    table.append(getHeader());
+    for (let i = 0; i < tableData.length; i++)
+        table.append(getRow(tableData[i]));
+}
+function getHeader() {
+    let row = document.createElement("tr");
+    let header = ["name", "phone", "email", "blogLink", "comment"];
+    for (let i = 0; i < header.length; i++)
+        row.append(getData(header[i]));
+    return row;
+}
+function getRow(contact) {
+    let row = document.createElement("tr");
+    row.append(getData(contact.name));
+    row.append(getData(contact.phone));
+    row.append(getData(contact.email));
+    row.append(getData(contact.blogLink));
+    row.append(getData(contact.comment));
+    return row;
+}
+function getData(data) {
+    let cell = document.createElement("td");
+    cell.innerHTML = data;
+    cell.setAttribute("class", "request_Table_cell")
+    return cell;
+}
+function flushTable(){
+    let table = $('#nameRequestTable');
+    if(table.children().length !== 0)
+    table.children().remove();
+
+}
+//Function Draw
+function drawTask(task) {
+    flashChoice(task);
+    flushData();
+    drawInputsOutputs(task);
+    attrSubButton(task);
+}
+function drawInputsOutputs(task) {
+    if (task === "request") requestInputs();
+    else addUpdDelInputs();
+}
+//Show/Hide
+function addUpdDelInputs() {
+    $('#phone').show();
+    $('#email').show();
+    $('#blogLink').show();
+    $('#comment').show();
+    $('#nameRequestTable').hide();
+}
+function requestInputs() {
+    $('#phone').hide();
+    $('#email').hide();
+    $('#blogLink').hide();
+    $('#comment').hide();
+    $('#nameRequestTable').show();
 }
